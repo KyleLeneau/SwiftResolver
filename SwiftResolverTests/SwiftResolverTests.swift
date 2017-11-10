@@ -45,7 +45,7 @@ class SwiftResolverTests: XCTestCase {
     
     func testContainerShouldRegisterBasicType() {
         let container = Container() { container in
-            container.register(Walkable.self) { _ in
+            _ = container.register(Walkable.self) { _ in
                 Bird()
             }
         }
@@ -60,10 +60,10 @@ class SwiftResolverTests: XCTestCase {
     
     func testContainerShouldRegisterConnectedTypes() {
         let container = Container() { container in
-            container.register(Walkable.self) { resolver in
+            _ = container.register(Walkable.self) { resolver in
                 AtAt(pilot: resolver.resolve(Pilot.self)!)
             }
-            container.register(Pilot.self) { _ in
+            _ = container.register(Pilot.self) { _ in
                 AtAtPilot()
             }
         }
