@@ -12,12 +12,12 @@ internal typealias FunctionType = Any
 
 // Ablility to use this as a type in the Array of services
 internal protocol ServiceEntryType: Any {
-    func describeWithKey(serviceKey: ServiceKey) -> String
+    func describeWithKey(_ serviceKey: ServiceKey) -> String
 }
 
 // Represents and entry in the registered services
 public final class ServiceEntry<Service> {
-    private let serviceType: Service.Type
+    fileprivate let serviceType: Service.Type
     internal let factory: FunctionType
     
     internal init(serviceType: Service.Type, factory: FunctionType) {
@@ -28,11 +28,11 @@ public final class ServiceEntry<Service> {
 
 extension ServiceEntry: ServiceEntryType {
     // Helper to print the type registered
-    internal func describeWithKey(serviceKey: ServiceKey) -> String {
+    internal func describeWithKey(_ serviceKey: ServiceKey) -> String {
         let nameDescription = serviceKey.name.map { ", Name: \"\($0)\"" } ?? ""
         return "Service: \(serviceType)"
             + nameDescription
-            + ", Factory: \(factory.dynamicType)"
+            + ", Factory: \(type(of: (factory) as AnyObject))"
     }
 }
 
@@ -49,7 +49,7 @@ internal struct ServiceKey {
 
 extension ServiceKey: Hashable {
     var hashValue: Int {
-        return String(factoryType).hashValue ^ (name?.hashValue ?? 0)
+        return String(describing: factoryType).hashValue ^ (name?.hashValue ?? 0)
     }
 }
 
